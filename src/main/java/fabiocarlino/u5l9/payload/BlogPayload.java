@@ -10,6 +10,7 @@ public class BlogPayload {
     private int minutiTempoLettura;
 
     public BlogPayload(String categoria, String titolo, String contenuto, int minutiTempoLettura) {
+        this.authorId = getAuthorId();
         this.categoria = categoria;
         this.titolo = titolo;
         this.contenuto = contenuto;

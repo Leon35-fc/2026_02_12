@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/authors")
 public class AuthorController {
@@ -25,26 +27,26 @@ public class AuthorController {
     @GetMapping("")
     public Page<Author> getAuthors(@RequestParam(defaultValue = "0") int page,
                                    @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "id") String sortBy) {
-        return authorsService.getAuthors(page, size, sortBy);
+        return authorService.getAuthors(page, size, sortBy);
     }
 
     //3) GET - http://localhost:3001/authors/{id}
     @GetMapping("/{authorId}")
-    public Author findById(@PathVariable int authorId) {
-        return authorsService.findById(authorId);
+    public Author findById(@PathVariable UUID authorId) {
+        return authorService.findById(authorId);
     }
 
     //4) - PUT http://localhost:3001/authors/{id} (+ req.body)
     @PutMapping("/{authorId}")
-    public Author findAndUpdate(@PathVariable int authorId, @RequestBody Author body) {
-        return authorsService.findByIdAndUpdate(authorId, body);
+    public Author findAndUpdate(@PathVariable UUID authorId, @RequestBody Author body) {
+        return authorService.findByIdAndUpdate(authorId, body);
     }
 
     //5) - DELETE http://localhost:3001/authors/{id}
     @DeleteMapping("/{authorId}")
     @ResponseStatus(HttpStatus.NO_CONTENT) // <-- 204 NO CONTENT
-    public void findAndDelete(@PathVariable int authorId) {
-        authorsService.findByIdAndDelete(authorId);
+    public void findAndDelete(@PathVariable UUID authorId) {
+        authorService.findByIdAndDelete(authorId);
     }
 
 }

@@ -1,12 +1,13 @@
 package fabiocarlino.u5l9.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@Table(name = "author")
+@Table(name = "authors")
 public class Author {
 
     @Column
@@ -16,12 +17,16 @@ public class Author {
     @Column
     String email;
     @Column
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     LocalDate dataDiNascita;
     @Column
     String avatar;
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    public Author() {
+    }
 
     public Author(String nome, String cognome, String email, LocalDate dataDiNascita) {
         this.nome = nome;

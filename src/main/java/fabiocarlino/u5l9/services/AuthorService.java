@@ -1,6 +1,7 @@
 package fabiocarlino.u5l9.services;
 
 import fabiocarlino.u5l9.entities.Author;
+import fabiocarlino.u5l9.exceptions.NotFoundException;
 import fabiocarlino.u5l9.repositories.AuthorRepo;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +20,14 @@ public class AuthorService {
     AuthorRepo authorRepo;
 
     public Author save(Author payload) {
-        authorRepo.findByEmail(payload.getEmail()).isPresent(author -> {
-            throw new BadRequestException("L'email " + payload.getEmail() + " è già stata utilizzata.");
+        authorRepo.findByEmail(payload.getEmail()).ifPresent(author -> {
+            try {
+                throw new BadRequestException("L'email " + author.getEmail() + " è già stata utilizzata.");
+            } catch (BadRequestException e) {
+                throw new RuntimeException(e);
+            }
         });
-        payload.setAvatar("https://ui-avatars.com/api/?name=" + body.getName().charAt(0) + "+" + body.getSurname().charAt(0));
+        payload.setAvatar("https://ui-avatars.com/api/?name=" + payload.getNome().charAt(0) + "+" + payload.getCognome().charAt(0));
         return authorRepo.save(payload);
     }
 
@@ -41,7 +46,7 @@ public class AuthorService {
         authorRepo.delete(found);
     }
 
-    public Author findByIdAndUpdate(int id, Author payload) {
+    public Author findByIdAndUpdate(UUID id, Author payload) {
 
         Author found = this.findById(id);
         found.setEmail(payload.getEmail());
